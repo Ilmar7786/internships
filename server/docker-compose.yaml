@@ -16,7 +16,7 @@ services:
 
 
   api:
-    restart: always
+    restart: on-failure
     build:
       dockerfile: Dockerfile
       context: '.'
