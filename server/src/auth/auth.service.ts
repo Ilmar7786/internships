@@ -13,7 +13,7 @@ import { CreateUserDto } from '@app/users/dto/create-user.dto'
 import { User } from '@app/users/entities/user.entity'
 
 import { IAuth, IJWTPayload, ITokens } from './auth.types'
-import { RefreshTokenDto } from "@app/auth/dto/refresh-token.dto";
+import { RefreshTokenDto } from '@app/auth/dto/refresh-token.dto'
 
 @Injectable()
 export class AuthService {

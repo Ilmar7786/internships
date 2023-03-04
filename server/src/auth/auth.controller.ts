@@ -1,16 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common'
-import {
-	ApiCreatedResponse,
-	ApiOperation,
-	ApiResponse,
-	ApiTags,
-} from '@nestjs/swagger'
+import { Body, Controller, Post } from "@nestjs/common";
+import { ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
-import { AuthService } from '@app/auth/auth.service'
-import { LoginUserDto } from '@app/auth/dto/login-user.dto'
-import { User } from '@app/users/entities/user.entity'
-import { RefreshTokenDto } from '@app/auth/dto/refresh-token.dto'
-import { RegisterUserDto } from '@app/auth/dto/register-user.dto'
+import { AuthService } from "@app/auth/auth.service";
+import { LoginUserDto } from "@app/auth/dto/login-user.dto";
+import { User } from "@app/users/entities/user.entity";
+import { RefreshTokenDto } from "@app/auth/dto/refresh-token.dto";
+import { RegisterUserDto } from "@app/auth/dto/register-user.dto";
 
 @ApiTags('Авторизация')
 @Controller('auth')

@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common'
-import { AuthModule } from '@app/auth'
-import { UsersModule } from '@app/users'
-import { TypeOrmModule } from '@nestjs/typeorm'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { Module } from "@nestjs/common";
+import { AuthModule } from "@app/auth";
+import { UsersModule } from "@app/users";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { VacanciesModule } from "./vacancies/vacancies.module";
 
 @Module({
 	imports: [
@@ -27,6 +28,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 		}),
 		UsersModule,
 		AuthModule,
+		VacanciesModule,
 	],
 })
 export class AppModule {}

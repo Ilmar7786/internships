@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
 import { ApiProperty } from '@nestjs/swagger'
+import { Exclude } from 'class-transformer'
 
 @Entity('users')
 export class User {
@@ -13,6 +14,7 @@ export class User {
 
 	@ApiProperty({ example: '12345678', description: 'Пароль' })
 	@Column()
+	@Exclude({ toPlainOnly: true })
 	password: string
 
 	@ApiProperty({ example: false, description: 'Администратор' })
