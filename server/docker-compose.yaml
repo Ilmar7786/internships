@@ -5,9 +5,9 @@ services:
     image: postgres:14.2
     restart: always
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: test_db
+      POSTGRES_USER: ${PSQL_USERNAME}
+      POSTGRES_PASSWORD: ${PSQL_PASSWORD}
+      POSTGRES_DB: ${PSQL_DATABASE}
     ports:
       - "5432:5432"
     volumes:
@@ -25,13 +25,10 @@ services:
     volumes:
       - /api/node_modules
       - ./api:/api
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: test_db
-      POSTGRES_HOST: postgres
-      JWT_ACCESS_SECRET: secret
-      JWT_ACCESS_EXPIRES: 15m
+      PSQL_HOST: postgres
     ports:
       - '3001:3000'
 
