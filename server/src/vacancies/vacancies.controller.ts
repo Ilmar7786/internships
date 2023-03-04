@@ -6,20 +6,15 @@ import {
 	Patch,
 	Param,
 	Delete,
-	UseGuards,
-	Query,
 } from '@nestjs/common'
 import { VacanciesService } from './vacancies.service'
-import { CreateVacancyDto } from './dto/create-vacancy.dto'
-import { UpdateVacancyDto } from './dto/update-vacancy.dto'
-import {
-	ApiBearerAuth,
-	ApiCreatedResponse,
-	ApiOperation, ApiQuery,
-	ApiTags
-} from "@nestjs/swagger";
-import { JwtAuthGuard } from '@app/auth/guards/jwt-auth.guard'
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger'
+import { CreateCategoryDto } from '@app/vacancies/dto/create-category.dto'
+import { UpdateCategoryDto } from '@app/vacancies/dto/update-category.dto'
+import { CategoryResponseDao } from '@app/vacancies/dao/category-response.dao'
+import { CreateVacancyDto } from '@app/vacancies/dto/create-vacancy.dto'
 import { Vacancy } from '@app/vacancies/entities/vacancy.entity'
+import { UpdateVacancyDto } from '@app/vacancies/dto/update-vacancy.dto'
 
 @ApiTags('Вакансии')
 @Controller('vacancies')
@@ -27,51 +22,74 @@ export class VacanciesController {
 	constructor(private readonly vacancyService: VacanciesService) {}
 
 	// @ApiBearerAuth()
-	@ApiOperation({ summary: 'Создать' })
-	@ApiCreatedResponse({ type: Vacancy })
+	@ApiOperation({ summary: 'Создать категорию' })
+	@ApiResponse({ status: 200, type: CategoryResponseDao })
 	// @UseGuards(JwtAuthGuard)
-	@Post()
-	create(@Body() dto: CreateVacancyDto) {
-		return this.vacancyService.create(dto)
+	@Post('category')
+	postCategory(@Body() body: CreateCategoryDto) {
+		return this.vacancyService.createCategory(body)
+	}
+
+	@ApiOperation({ summary: 'Список категорий' })
+	@ApiResponse({ status: 200, type: [CategoryResponseDao] })
+	@Get('category')
+	getCategories() {
+		return this.vacancyService.findAllCategory()
+	}
+
+	@ApiOperation({ summary: 'Редактировать категорию' })
+	@ApiResponse({ status: 200, type: CategoryResponseDao })
+	@ApiParam({ name: 'id', type: 'number' })
+	@Patch('category/:id')
+	editCategory(@Param('id') id: string, @Body() body: UpdateCategoryDto) {
+		return this.vacancyService.updateCategory(+id, body)
+	}
+
+	@ApiOperation({ summary: 'Удалить категорию' })
+	@ApiResponse({ status: 200, description: 'Успешно удалено' })
+	@ApiParam({ name: 'id', type: 'number' })
+	@Delete('category/:id')
+	deleteCategory(@Param('id') id: string) {
+		return this.vacancyService.removeCategory(+id)
+	}
+
+	// @ApiBearerAuth()
+	@ApiOperation({ summary: 'Создать вакансию' })
+	@ApiResponse({ status: 200, type: Vacancy })
+	// @UseGuards(JwtAuthGuard)
+	@Post('vacancy')
+	postVacancies(@Body() body: CreateVacancyDto) {
+		return this.vacancyService.createVacancy(body)
 	}
 
 	@ApiOperation({ summary: 'Список вакансий' })
-	@ApiCreatedResponse({ type: Vacancy })
-	@Get()
-	findAll() {
-		return this.vacancyService.findAll()
+	@ApiResponse({ status: 200, type: [Vacancy] })
+	@Get('vacancy')
+	getVacancies() {
+		return this.vacancyService.findAllVacancy()
 	}
 
-	@ApiOperation({ summary: 'Получить' })
-	@ApiCreatedResponse({ type: Vacancy })
-	@Get(':id')
-	findOne(@Param('id') id: string) {
-		return this.vacancyService.findOne(+id)
+	@ApiOperation({ summary: 'Получить вакансию' })
+	@ApiResponse({ status: 200, type: Vacancy })
+	@ApiParam({ name: 'id', type: 'number' })
+	@Get('vacancy/:id')
+	getOneVacancy(@Param('id') id: string) {
+		return this.vacancyService.findOneVacancy(+id)
 	}
 
-	// @ApiBearerAuth()
-	@ApiOperation({ summary: 'Обновить' })
-	@ApiCreatedResponse({ type: Vacancy })
-	// @UseGuards(JwtAuthGuard)
-	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateVacancyDto: UpdateVacancyDto) {
-		return this.vacancyService.update(+id, updateVacancyDto)
+	@ApiOperation({ summary: 'Редактировать вакансию' })
+	@ApiResponse({ status: 200, type: Vacancy })
+	@ApiParam({ name: 'id', type: 'number' })
+	@Patch('vacancy/:id')
+	editVacancy(@Param('id') id: string, @Body() body: UpdateVacancyDto) {
+		return this.vacancyService.updateVacancy(+id, body)
 	}
 
-	// @ApiBearerAuth()
-	@ApiOperation({ summary: 'Удалить' })
-	@ApiCreatedResponse({ type: Vacancy })
-	// @UseGuards(JwtAuthGuard)
-	@Delete(':id')
-	remove(@Param('id') id: string) {
-		return this.vacancyService.remove(+id)
-	}
-
-	@ApiQuery({ name: 'q' })
-	@ApiOperation({ summary: 'Поиск' })
-	@ApiCreatedResponse({ type: [Vacancy] })
-	@Get('search')
-	search(@Query('q') query) {
-		return this.vacancyService.remove(+query)
+	@ApiOperation({ summary: 'Удалить вакансию' })
+	@ApiResponse({ status: 200, description: 'Успешно удалено' })
+	@ApiParam({ name: 'id', type: 'number' })
+	@Delete('vacancy/:id')
+	deleteVacancy(@Param('id') id: string) {
+		return this.vacancyService.removeVacancy(+id)
 	}
 }

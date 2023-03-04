@@ -12,9 +12,7 @@ export class User {
 	@Column({ unique: true })
 	email: string
 
-	@ApiProperty({ example: '12345678', description: 'Пароль' })
-	@Column()
-	@Exclude({ toPlainOnly: true })
+	@Exclude()
 	password: string
 
 	@ApiProperty({ example: false, description: 'Администратор' })

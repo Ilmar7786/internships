@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger'
 
 import { AppModule } from './app.module'
-import * as process from "process";
+import * as process from 'process'
 
 async function bootstrap() {
 	const logger = new Logger(bootstrap.name)
@@ -35,7 +35,7 @@ function InitSwagger(app: INestApplication, path: string): string {
 	const swagPath = `${path}/swagger`
 
 	const config = new DocumentBuilder()
-		.setTitle('Кейс: сайт о стажировках ')
+		.setTitle('Сайт о стажировках для Центр-Инвест ')
 		.setDescription('Описание API. Команда Some Developer')
 		.setVersion(process.env.npm_package_version)
 		.addBearerAuth()

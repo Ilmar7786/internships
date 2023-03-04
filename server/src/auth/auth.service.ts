@@ -2,6 +2,7 @@ import { JwtService } from '@nestjs/jwt'
 import { compare, hash } from 'bcryptjs'
 import {
 	BadRequestException,
+	ForbiddenException,
 	Injectable,
 	UnauthorizedException,
 } from '@nestjs/common'
@@ -25,7 +26,7 @@ export class AuthService {
 
 	async signIn(dto: CreateUserDto) {
 		const user = await this.validateUser(dto)
-		const tokens = await this.issueTokenPair({ id: String(user.id) })
+		const tokens = await this.issueTokenPair({ id: user.id })
 
 		return {
 			user: user,
@@ -46,7 +47,7 @@ export class AuthService {
 			password: await hash(dto.password, 10),
 		})
 
-		const tokens = await this.issueTokenPair({ id: String(user.id) })
+		const tokens = await this.issueTokenPair({ id: user.id })
 
 		// todo: убрать пароль
 		return {
@@ -68,13 +69,20 @@ export class AuthService {
 	async issueTokenPair(payload: IJWTPayload): Promise<ITokens> {
 		const accessToken = await this.jwtService.signAsync(payload)
 		const refreshToken = await this.jwtService.signAsync(payload, {
-			expiresIn: this.configService.get('jwt.jwtRefreshExpires', '30d'),
+			expiresIn: this.configService.get('JWT_REFRESH_EXPIRES', '30d'),
 		})
 
 		return { accessToken, refreshToken }
 	}
 
-	refreshToken(dto: RefreshTokenDto) {
-		return
+	async refreshToken(dto: RefreshTokenDto): Promise<ITokens> {
+		const payload = this.jwtService.verify<IJWTPayload>(dto.token)
+		if (!payload) throw new ForbiddenException('Access Denied')
+
+		const user = await this.userService.findById(payload.id)
+		if (!user) {
+			throw new ForbiddenException('Access Denied')
+		}
+		return await this.issueTokenPair({ id: user.id })
 	}
 }

@@ -1,9 +1,14 @@
-import { Controller, Get, Request, UseGuards } from "@nestjs/common";
+import { Controller, Get, Request, UseGuards } from '@nestjs/common'
 
-import { JwtAuthGuard } from "@app/auth/guards/jwt-auth.guard";
-import { UsersService } from "./users.service";
-import { ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { User } from "@app/users/entities/user.entity";
+import { JwtAuthGuard } from '@app/auth/guards/jwt-auth.guard'
+import { UsersService } from './users.service'
+import {
+	ApiBearerAuth,
+	ApiCreatedResponse,
+	ApiOperation,
+	ApiTags,
+} from '@nestjs/swagger'
+import { User } from '@app/users/entities/user.entity'
 
 @ApiTags('Пользователь')
 @Controller('users')

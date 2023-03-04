@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 
 import { User } from './entities/user.entity'
 import { CreateUserDto } from './dto/create-user.dto'
+import { FindOneOptions } from 'typeorm/find-options/FindOneOptions'
 
 @Injectable()
 export class UsersService {
@@ -29,7 +30,29 @@ export class UsersService {
 		return await this.userRepository.find()
 	}
 
-	getUserInfo(user: any) {
-		return
+	async getUserInfo(userId: string): Promise<User | null> {
+		return await this.userRepository.findOne({
+			where: {
+				id: +userId,
+			},
+		})
+	}
+
+	async checkIsAdmin(userId): Promise<boolean> {
+		const user = await this.userRepository.findOne({
+			where: {
+				id: userId,
+			},
+		})
+
+		return user.isAdmin
+	}
+
+	async findById(userId: number): Promise<User | null> {
+		return await this.userRepository.findOne({
+			where: {
+				id: userId,
+			},
+		})
 	}
 }
