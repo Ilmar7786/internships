@@ -1,12 +1,15 @@
-FROM node:18.1.0-alpine3.14
+FROM node:16.14.0
 
-WORKDIR /app
+RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app/server
 
-COPY package.json ./
-COPY yarn.lock ./
+WORKDIR /usr/src/app/server
 
-COPY ./ ./
+COPY package*.json ./
+RUN npm install
 
-RUN npm run build
+COPY . .
 
-CMD ["npm", "run", "start"]
+EXPOSE 5000
+
+CMD npm run start
