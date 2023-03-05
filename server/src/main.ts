@@ -1,6 +1,11 @@
-import { INestApplication, Logger, ValidationPipe } from '@nestjs/common'
+import {
+	ClassSerializerInterceptor,
+	INestApplication,
+	Logger,
+	ValidationPipe,
+} from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { NestFactory } from '@nestjs/core'
+import { NestFactory, Reflector } from '@nestjs/core'
 import {
 	DocumentBuilder,
 	SwaggerDocumentOptions,
@@ -21,6 +26,7 @@ async function bootstrap() {
 
 	app.setGlobalPrefix(appPrefix)
 	app.useGlobalPipes(new ValidationPipe())
+	app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
 
 	const swagPath = InitSwagger(app, appPrefix)
 

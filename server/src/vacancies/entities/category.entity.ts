@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import {
+	Column,
+	Entity,
+	ManyToOne,
+	OneToMany,
+	PrimaryGeneratedColumn,
+} from 'typeorm'
 import { Vacancy } from '@app/vacancies/entities/vacancy.entity'
 
 @Entity('vacancy_categories')
@@ -10,5 +16,5 @@ export class VacancyCategory {
 	title: string
 
 	@OneToMany(() => Vacancy, (vacancy) => vacancy.category)
-	vacancy: Vacancy[]
+	vacancies: Vacancy[]
 }

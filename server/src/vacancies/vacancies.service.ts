@@ -7,6 +7,7 @@ import { Repository } from 'typeorm'
 import { Vacancy } from '@app/vacancies/entities/vacancy.entity'
 import { CreateCategoryDto } from '@app/vacancies/dto/create-category.dto'
 import { UpdateCategoryDto } from '@app/vacancies/dto/update-category.dto'
+import { UsersService } from '@app/users/users.service'
 
 @Injectable()
 export class VacanciesService {
@@ -14,7 +15,8 @@ export class VacanciesService {
 		@InjectRepository(VacancyCategory)
 		private readonly categoryRepository: Repository<VacancyCategory>,
 		@InjectRepository(Vacancy)
-		private readonly vacancyRepository: Repository<Vacancy>
+		private readonly vacancyRepository: Repository<Vacancy>,
+		private readonly userService: UsersService
 	) {}
 
 	async createCategory(dto: CreateCategoryDto): Promise<VacancyCategory> {
@@ -38,22 +40,49 @@ export class VacanciesService {
 	}
 
 	async createVacancy(dto: CreateVacancyDto): Promise<Vacancy> {
-		return await this.vacancyRepository.save(dto)
+		const category = await this.categoryRepository.findOne({
+			where: { id: dto.categoryId },
+		})
+		if (!category) throw new BadRequestException('Category not fount')
+
+		return await this.vacancyRepository.save({ ...dto, category })
 	}
 
-	// todo сделать логику рекомендации
-	recommendationsFindAllVacancy(): Promise<Vacancy[]> {
-		return this.vacancyRepository.find()
+	async recommendationsFindAllVacancy(userId: number): Promise<Vacancy[]> {
+		const user = await this.userService.getUserInfo(userId)
+		const userSpecialty = user.specialty
+
+		return await this.vacancyRepository
+			.createQueryBuilder('user')
+			.where('user.experience = :experience OR user.category = :id', {
+				experience: 1,
+				id: 3,
+			})
+			.leftJoinAndSelect('user.category', 'category')
+			.getMany()
+
+		// return this.vacancyRepository.find({
+		// 	order: {},
+		// 	relations: {
+		// 		category: true,
+		// 	},
+		// })
 	}
 
-	findAllVacancy(): Promise<Vacancy[]> {
-		return this.vacancyRepository.find({ loadRelationIds: true })
+	async findAllVacancy(): Promise<Vacancy[]> {
+		return this.vacancyRepository.find({
+			relations: {
+				category: true,
+			},
+		})
 	}
 
 	findOneVacancy(id: number): Promise<Vacancy | null> {
 		return this.vacancyRepository.findOne({
 			where: { id },
-			loadRelationIds: true,
+			relations: {
+				category: true,
+			},
 		})
 	}
 

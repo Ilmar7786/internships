@@ -9,22 +9,24 @@ import {
 import { ConfigService } from '@nestjs/config'
 
 import { UsersService } from '@app/users/users.service'
-import { CreateUserDto } from '@app/users/dto/create-user.dto'
 
 import { User } from '@app/users/entities/user.entity'
 
 import { IAuth, IJWTPayload, ITokens } from './auth.types'
 import { RefreshTokenDto } from '@app/auth/dto/refresh-token.dto'
+import { LoginUserDto } from '@app/auth/dto/login-user.dto'
+import { RegisterUserDto } from '@app/auth/dto/register-user.dto'
+import { SpecialtiesService } from '@app/specialties/specialties.service'
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private readonly userService: UsersService,
 		private readonly jwtService: JwtService,
-		private readonly configService: ConfigService
+		private readonly configService: ConfigService,
 	) {}
 
-	async signIn(dto: CreateUserDto) {
+	async signIn(dto: LoginUserDto) {
 		const user = await this.validateUser(dto)
 		const tokens = await this.issueTokenPair({ id: user.id })
 
@@ -34,7 +36,7 @@ export class AuthService {
 		}
 	}
 
-	async signUp(dto: CreateUserDto): Promise<IAuth> {
+	async signUp(dto: RegisterUserDto): Promise<IAuth> {
 		const oldUser = await this.userService.findByEmail(dto.email)
 		if (oldUser) {
 			throw new BadRequestException(
@@ -46,17 +48,17 @@ export class AuthService {
 			...dto,
 			password: await hash(dto.password, 10),
 		})
+		delete user.password
 
 		const tokens = await this.issueTokenPair({ id: user.id })
 
-		// todo: убрать пароль
 		return {
 			user: user,
 			...tokens,
 		}
 	}
 
-	async validateUser(dto: CreateUserDto): Promise<User> {
+	async validateUser(dto: LoginUserDto): Promise<User> {
 		const user = await this.userService.findByEmail(dto.email)
 		if (!user) throw new UnauthorizedException('User not found')
 

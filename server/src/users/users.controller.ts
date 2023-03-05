@@ -20,6 +20,6 @@ export class UsersController {
 	@UseGuards(JwtAuthGuard)
 	@Get()
 	getUserInfo(@Request() req) {
-		return this.usersService.getUserInfo(req.user)
+		return this.usersService.getUserInfo(req.user.id)
 	}
 }

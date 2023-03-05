@@ -1,9 +1,10 @@
-import { Module } from "@nestjs/common";
-import { AuthModule } from "@app/auth";
-import { UsersModule } from "@app/users";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ConfigModule, ConfigService } from "@nestjs/config";
-import { VacanciesModule } from "./vacancies/vacancies.module";
+import { Module } from '@nestjs/common'
+import { AuthModule } from '@app/auth'
+import { UsersModule } from '@app/users'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { VacanciesModule } from './vacancies/vacancies.module'
+import { SpecialtiesModule } from './specialties/specialties.module'
 
 @Module({
 	imports: [
@@ -24,11 +25,13 @@ import { VacanciesModule } from "./vacancies/vacancies.module";
 				database: cfg.get('PSQL_DATABASE'),
 				synchronize: true,
 				autoLoadEntities: true,
+				logging: 'all',
 			}),
 		}),
 		UsersModule,
 		AuthModule,
 		VacanciesModule,
+		SpecialtiesModule,
 	],
 })
 export class AppModule {}
