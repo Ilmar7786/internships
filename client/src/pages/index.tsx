@@ -1,9 +1,16 @@
 import type { FC } from "react";
-import { PageLayout } from "@/shared/layouts/page";
+import { useQuery } from "react-query";
+import { fetcherUserInfo } from "@/shared/api/user.api";
+import { CircularProgress } from "@mui/material";
+import { User } from "@/entities/user.entity";
 
-export const Home: FC = () => {
+const Home: FC = () => {
+    const { isLoading, error, data } = useQuery<User>('repoData', fetcherUserInfo)
+
+    if (isLoading) return <CircularProgress />
+
     return (
-        <PageLayout>Home page</PageLayout>
+        <div>Home page</div>
     )
 }
 
