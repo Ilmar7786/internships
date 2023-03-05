@@ -3,7 +3,7 @@ import { CreateVacancyDto } from './dto/create-vacancy.dto'
 import { UpdateVacancyDto } from './dto/update-vacancy.dto'
 import { VacancyCategory } from '@app/vacancies/entities/category.entity'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { ILike, Like, Repository } from 'typeorm'
 import { Vacancy } from '@app/vacancies/entities/vacancy.entity'
 import { CreateCategoryDto } from '@app/vacancies/dto/create-category.dto'
 import { UpdateCategoryDto } from '@app/vacancies/dto/update-category.dto'
@@ -66,17 +66,13 @@ export class VacanciesService {
 			)
 			.leftJoinAndSelect('user.category', 'category')
 			.getMany()
-
-		// return this.vacancyRepository.find({
-		// 	order: {},
-		// 	relations: {
-		// 		category: true,
-		// 	},
-		// })
 	}
 
-	async findAllVacancy(): Promise<Vacancy[]> {
+	async findAllVacancy(search = ''): Promise<Vacancy[]> {
 		return this.vacancyRepository.find({
+			where: {
+				title: Like<string>(`%${search}%`),
+			},
 			relations: {
 				category: true,
 			},
