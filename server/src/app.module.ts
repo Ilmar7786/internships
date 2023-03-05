@@ -3,6 +3,9 @@ import { AuthModule } from '@app/auth'
 import { UsersModule } from '@app/users'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigModule, ConfigService } from '@nestjs/config'
+import { VacanciesModule } from './vacancies/vacancies.module'
+import { SpecialtiesModule } from './specialties/specialties.module'
+import { JobPostingsModule } from './job-postings/job-postings.module';
 
 @Module({
 	imports: [
@@ -23,10 +26,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 				database: cfg.get('PSQL_DATABASE'),
 				synchronize: true,
 				autoLoadEntities: true,
+				logging: 'all',
 			}),
 		}),
 		UsersModule,
 		AuthModule,
+		VacanciesModule,
+		SpecialtiesModule,
+		JobPostingsModule,
 	],
 })
 export class AppModule {}

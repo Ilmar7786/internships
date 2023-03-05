@@ -1,6 +1,11 @@
-import { INestApplication, Logger, ValidationPipe } from '@nestjs/common'
+import {
+	ClassSerializerInterceptor,
+	INestApplication,
+	Logger,
+	ValidationPipe,
+} from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { NestFactory } from '@nestjs/core'
+import { NestFactory, Reflector } from '@nestjs/core'
 import {
 	DocumentBuilder,
 	SwaggerDocumentOptions,
@@ -8,7 +13,7 @@ import {
 } from '@nestjs/swagger'
 
 import { AppModule } from './app.module'
-import * as process from "process";
+import * as process from 'process'
 
 async function bootstrap() {
 	const logger = new Logger(bootstrap.name)
@@ -21,6 +26,7 @@ async function bootstrap() {
 
 	app.setGlobalPrefix(appPrefix)
 	app.useGlobalPipes(new ValidationPipe())
+	app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)))
 
 	const swagPath = InitSwagger(app, appPrefix)
 
@@ -35,7 +41,7 @@ function InitSwagger(app: INestApplication, path: string): string {
 	const swagPath = `${path}/swagger`
 
 	const config = new DocumentBuilder()
-		.setTitle('Кейс: сайт о стажировках ')
+		.setTitle('Сайт о стажировках для Центр-Инвест ')
 		.setDescription('Описание API. Команда Some Developer')
 		.setVersion(process.env.npm_package_version)
 		.addBearerAuth()

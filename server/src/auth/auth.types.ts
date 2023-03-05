@@ -1,5 +1,5 @@
 export interface IJWTPayload {
-	id: string
+	id: number
 }
 
 export interface IAuth {
@@ -13,6 +13,11 @@ export interface IAuthUser {
 }
 
 export interface ITokens {
+	accessToken: string
+	refreshToken: string
+}
+
+export class Tokens implements ITokens {
 	accessToken: string
 	refreshToken: string
 }

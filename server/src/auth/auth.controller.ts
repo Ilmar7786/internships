@@ -11,6 +11,7 @@ import { LoginUserDto } from '@app/auth/dto/login-user.dto'
 import { User } from '@app/users/entities/user.entity'
 import { RefreshTokenDto } from '@app/auth/dto/refresh-token.dto'
 import { RegisterUserDto } from '@app/auth/dto/register-user.dto'
+import { Tokens } from '@app/auth/auth.types'
 
 @ApiTags('Авторизация')
 @Controller('auth')
@@ -38,11 +39,11 @@ export class AuthController {
 	@ApiOperation({ summary: 'Обновление токена' })
 	@ApiResponse({
 		status: 200,
-		type: User,
+		type: Tokens,
 		description: 'Получить новую пару ключей',
 	})
 	@Post('refresh-token')
-	refreshToken(@Body() dto: RefreshTokenDto) {
-		return this.authService.refreshToken(dto)
+	refreshToken(@Body() body: RefreshTokenDto) {
+		return this.authService.refreshToken(body)
 	}
 }

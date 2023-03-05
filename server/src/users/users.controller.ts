@@ -1,10 +1,14 @@
-import { Body, Controller, Get, Post, UseGuards, Request } from '@nestjs/common'
+import { Controller, Get, Request, UseGuards } from '@nestjs/common'
 
 import { JwtAuthGuard } from '@app/auth/guards/jwt-auth.guard'
-import { CreateUserDto } from './dto/create-user.dto'
 import { UsersService } from './users.service'
-import { ApiBearerAuth, ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger'
-import { User } from "@app/users/entities/user.entity";
+import {
+	ApiBearerAuth,
+	ApiCreatedResponse,
+	ApiOperation,
+	ApiTags,
+} from '@nestjs/swagger'
+import { User } from '@app/users/entities/user.entity'
 
 @ApiTags('Пользователь')
 @Controller('users')
@@ -14,8 +18,14 @@ export class UsersController {
 	@ApiOperation({ summary: 'Информация пользователя' })
 	@ApiCreatedResponse({ type: User })
 	@UseGuards(JwtAuthGuard)
-	@Get()
+	@Get('info')
 	getUserInfo(@Request() req) {
-		return this.usersService.getUserInfo(req.user)
+		return this.usersService.getUserInfo(req.user.id)
+	}
+	@ApiOperation({ summary: 'Список пользователей' })
+	@ApiCreatedResponse({ type: [User] })
+	@Get()
+	getAll() {
+		return this.usersService.findAll()
 	}
 }
