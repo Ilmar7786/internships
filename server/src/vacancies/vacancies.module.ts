@@ -14,5 +14,6 @@ import { UsersModule } from '@app/users'
 		TypeOrmModule.forFeature([VacancyCategory, Vacancy, User]),
 		UsersModule,
 	],
+	exports: [VacanciesService],
 })
 export class VacanciesModule {}

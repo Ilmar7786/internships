@@ -18,8 +18,14 @@ export class UsersController {
 	@ApiOperation({ summary: 'Информация пользователя' })
 	@ApiCreatedResponse({ type: User })
 	@UseGuards(JwtAuthGuard)
-	@Get()
+	@Get('info')
 	getUserInfo(@Request() req) {
 		return this.usersService.getUserInfo(req.user.id)
+	}
+	@ApiOperation({ summary: 'Список пользователей' })
+	@ApiCreatedResponse({ type: [User] })
+	@Get()
+	getAll() {
+		return this.usersService.findAll()
 	}
 }

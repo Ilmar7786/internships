@@ -2,7 +2,7 @@ import {
 	Column,
 	Entity, JoinColumn,
 	ManyToMany,
-	ManyToOne,
+	ManyToOne, OneToMany,
 	OneToOne,
 	PrimaryGeneratedColumn
 } from "typeorm";
@@ -12,6 +12,7 @@ import { SpecialityFieldEducation } from "@app/specialties/entities/speciality-f
 import { SpecialityEnlargedGroup } from "@app/specialties/entities/speciality-enlarged-group.entity";
 import { SpecialityLevelsEducation } from "@app/specialties/entities/speciality-levels-education.entity";
 import { SpecialityProfession } from "@app/specialties/entities/speciality-profession.entity";
+import { JobPosting } from "@app/job-postings/entities/job-posting.entity";
 
 @Entity('vacancies')
 export class Vacancy {
@@ -66,4 +67,7 @@ export class Vacancy {
 	)
 	@JoinColumn({ name: 'speciality_profession_id' })
 	specialityProfession: SpecialityProfession
+
+	@OneToMany(() => JobPosting, (job) => job.vacancy)
+	jobPosting: JobPosting[]
 }
