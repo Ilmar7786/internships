@@ -40,6 +40,7 @@ export class JobPostingsService {
 				vacancy: true,
 				user: true,
 			},
+			loadEagerRelations: true,
 		})
 	}
 }

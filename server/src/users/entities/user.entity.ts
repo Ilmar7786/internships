@@ -1,14 +1,15 @@
 import {
 	Column,
 	Entity,
-	JoinColumn, OneToMany,
+	JoinColumn,
+	OneToMany,
 	OneToOne,
-	PrimaryGeneratedColumn
-} from "typeorm";
+	PrimaryGeneratedColumn,
+} from 'typeorm'
 import { ApiProperty } from '@nestjs/swagger'
 import { Exclude } from 'class-transformer'
 import { Specialty } from '@app/specialties/entities/specialty.entity'
-import { JobPosting } from "@app/job-postings/entities/job-posting.entity";
+import { JobPosting } from '@app/job-postings/entities/job-posting.entity'
 
 @Entity('users')
 export class User {
@@ -44,10 +45,10 @@ export class User {
 	@Column({ default: false })
 	isAdmin: boolean
 
-	@OneToOne(() => Specialty, (specialty) => specialty.user)
+	@OneToOne(() => Specialty, (specialty) => specialty.user, { eager: true })
 	@JoinColumn({ name: 'specialty_id' })
 	specialty: Specialty
 
-	@OneToMany(()=> JobPosting, (job) => job.user)
+	@OneToMany(() => JobPosting, (job) => job.user)
 	jobPosting: JobPosting
 }
