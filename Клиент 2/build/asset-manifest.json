@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.2bfdafc6.css",
+    "main.js": "/static/js/main.d84f197b.js",
+    "static/media/fon22.jpg": "/static/media/fon22.519f7fbec02269699403.jpg",
+    "index.html": "/index.html",
+    "main.2bfdafc6.css.map": "/static/css/main.2bfdafc6.css.map",
+    "main.d84f197b.js.map": "/static/js/main.d84f197b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2bfdafc6.css",
+    "static/js/main.d84f197b.js"
+  ]
+}
