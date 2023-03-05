@@ -54,10 +54,16 @@ export class VacanciesService {
 
 		return await this.vacancyRepository
 			.createQueryBuilder('user')
-			.where('user.experience = :experience OR user.category = :id', {
-				experience: 1,
-				id: 3,
-			})
+			.where(
+				'user.speciality_field_education_id = :field OR user.speciality_enlarged_group_id = :group OR ' +
+					'user.speciality_level_education_id = :lvl OR user.speciality_profession_id = :profession',
+				{
+					field: userSpecialty.specialityFieldEducation.id,
+					group: userSpecialty.specialityEnlargedGroup.id,
+					lvl: userSpecialty.specialityLevelEducation.id,
+					profession: userSpecialty.specialityProfession.id,
+				}
+			)
 			.leftJoinAndSelect('user.category', 'category')
 			.getMany()
 
